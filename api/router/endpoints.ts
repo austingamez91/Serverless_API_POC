@@ -1,73 +1,86 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance } from "fastify";
 import {
   getAllMakes,
   getModelsByMake,
   getPartsByModel,
-  getPartById
-} from '../services/carService'
+  getPartById,
+} from "../services/carService";
 
 export const registerRoutes = (app: FastifyInstance) => {
-  app.get('/health', async (req, reply) => {
-    return { status: 'ok' }
-  })
+  app.head("/", async (req, reply) => {
+    reply.code(200).send();
+  });
+  app.get("/health", async (req, reply) => {
+    return { status: "ok" };
+  });
 
-  app.get('/makes', async (req, reply) => {
+  app.get("/makes", async (req, reply) => {
     const { name, limit, offset } = req.query as {
-      name?: string
-      limit?: number
-      offset?: number
-    }
+      name?: string;
+      limit?: number;
+      offset?: number;
+    };
 
-    const makes = await getAllMakes(name, limit, offset)
-    return makes
-  })
+    const makes = await getAllMakes(name, limit, offset);
+    return makes;
+  });
 
-  app.get('/makes/:makeId/models', async (req, reply) => {
-    const { makeId } = req.params as { makeId: string }
+  app.get("/makes/:makeId/models", async (req, reply) => {
+    const { makeId } = req.params as { makeId: string };
     const { name, limit, offset } = req.query as {
-      name?: string
-      limit?: string
-      offset?: string
-    }
-    const parsedLimit = limit ? parseInt(limit, 10) : undefined
-    const parsedOffset = offset ? parseInt(offset, 10) : undefined
+      name?: string;
+      limit?: string;
+      offset?: string;
+    };
+    const parsedLimit = limit ? parseInt(limit, 10) : undefined;
+    const parsedOffset = offset ? parseInt(offset, 10) : undefined;
 
-    const models = await getModelsByMake(Number(makeId), name, parsedLimit, parsedOffset)
+    const models = await getModelsByMake(
+      Number(makeId),
+      name,
+      parsedLimit,
+      parsedOffset,
+    );
 
     if (!models.length) {
-      return reply.code(404).send({ detail: 'No models found for this make' })
+      return reply.code(404).send({ detail: "No models found for this make" });
     }
 
-    return models
-  })
+    return models;
+  });
 
-  app.get('/models/:modelId/parts', async (req, reply) => {
-    const { modelId } = req.params as { modelId: string }
+  app.get("/models/:modelId/parts", async (req, reply) => {
+    const { modelId } = req.params as { modelId: string };
     const { name, limit, offset } = req.query as {
-      name?: string
-      limit?: string
-      offset?: string
-    }
-    const parsedLimit = limit ? parseInt(limit, 10) : undefined
-    const parsedOffset = offset ? parseInt(offset, 10) : undefined
+      name?: string;
+      limit?: string;
+      offset?: string;
+    };
+    const parsedLimit = limit ? parseInt(limit, 10) : undefined;
+    const parsedOffset = offset ? parseInt(offset, 10) : undefined;
 
-    const parts = await getPartsByModel(Number(modelId), name, parsedLimit, parsedOffset)
+    const parts = await getPartsByModel(
+      Number(modelId),
+      name,
+      parsedLimit,
+      parsedOffset,
+    );
 
     if (!parts.length) {
-      return reply.code(404).send({ detail: 'No parts found for this model' })
+      return reply.code(404).send({ detail: "No parts found for this model" });
     }
 
-    return parts
-  })
+    return parts;
+  });
 
-  app.get('/parts/:partId', async (req, reply) => {
-    const { partId } = req.params as { partId: string }
-    const part = await getPartById(Number(partId))
+  app.get("/parts/:partId", async (req, reply) => {
+    const { partId } = req.params as { partId: string };
+    const part = await getPartById(Number(partId));
 
     if (!part) {
-      return reply.code(404).send({ detail: 'Part not found' })
+      return reply.code(404).send({ detail: "Part not found" });
     }
 
-    return part
-  })
-}
+    return part;
+  });
+};

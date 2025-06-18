@@ -1,15 +1,15 @@
-import pino from 'pino'
+import pino from "pino";
 
 export const loggerOptions = {
-  name: 'car-parts',
-  level: 'info',
+  name: "car-parts",
+  level: "info",
   transport: {
-    target: 'pino-pretty',
+    target: "pino-pretty",
     options: {
       colorize: true,
-      ignore: 'pid,hostname',
-      translateTime: 'SYS:standard',
+      ignore: "pid,hostname",
+      translateTime: "SYS:standard",
     },
   },
-}
-export const logger = pino(loggerOptions)
+};
+export const logger = pino(loggerOptions);

@@ -1,8 +1,7 @@
-import { CarDataScraper } from './scraper';
-import { CarDataPersister } from './persister';
-import { logger } from '../common/logger';
-import { dataExists } from '../common/db';
-
+import { CarDataScraper } from "./scraper";
+import { CarDataPersister } from "./persister";
+import { logger } from "../common/logger";
+import { dataExists } from "../common/db";
 
 async function data_exists(): Promise<boolean> {
   logger.info("Checking if data exists (noop)");
@@ -21,9 +20,10 @@ async function data_exists(): Promise<boolean> {
 async function main() {
   console.log("🚀 Scraper is Ready");
 
-
   if (await data_exists()) {
-    logger.info("✅ Our database already has the data we need. No need to scrape");
+    logger.info(
+      "✅ Our database already has the data we need. No need to scrape",
+    );
     return;
   }
 
@@ -45,7 +45,9 @@ async function main() {
   for (const [make, models] of modelResults) {
     for (const [modelName, modelUrl] of models) {
       partsTasks.push(
-        scraper.getParts(modelUrl).then((parts) => [make, modelName, parts] as const)
+        scraper
+          .getParts(modelUrl)
+          .then((parts) => [make, modelName, parts] as const),
       );
     }
   }
