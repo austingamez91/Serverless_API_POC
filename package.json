@@ -16,6 +16,7 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "start": "npx tsx api/main.ts"
+    "start-api": "npx tsx api/main.ts",
+    "scrape": "npx tsx scraper/main.ts"
   }
 }

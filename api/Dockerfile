@@ -11,4 +11,4 @@ RUN npm install
 
 WORKDIR /app/api
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start-api"]
