@@ -1,0 +1,15 @@
+import pino from 'pino'
+
+export const loggerOptions = {
+  name: 'car-parts',
+  level: 'info',
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      ignore: 'pid,hostname',
+      translateTime: 'SYS:standard',
+    },
+  },
+}
+export const logger = pino(loggerOptions)
