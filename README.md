@@ -1,4 +1,4 @@
-A simple proof of concept for a serverless API written in typescript
+A simple proof of concept for a serverless API written in typescript. It is currently live, deployed through docker containers on [Render](https://render.com/)
 
 It consists of 3 subfolders:
 
