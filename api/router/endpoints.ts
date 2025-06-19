@@ -7,6 +7,16 @@ export const registerRoutes = (app: FastifyInstance) => {
   app.head("/", async (req, reply) => {
     reply.code(200).send();
   });
+  app.get("/", async (req, reply) => {
+    reply.code(200).send();
+  });
+
+  app.get("/ping", async (req, reply) => {
+    req.log.info("Ping route hit!");
+    return { pong: true };
+  });
+
+
   app.get("/health", async (req, reply) => {
     return { status: "ok" };
   });
