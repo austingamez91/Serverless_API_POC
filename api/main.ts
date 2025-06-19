@@ -1,8 +1,8 @@
 import Fastify from "fastify";
 import { registerRoutes } from "./router/endpoints";
 import lifespanPlugin from "./plugins/lifespan";
-import { loggerOptions } from "../common/logger";
-const app = Fastify({ logger: loggerOptions, ignoreTrailingSlash: true, pluginTimeout:0 });
+import { logger } from "../common/logger";
+const app = Fastify({ loggerInstance: logger, ignoreTrailingSlash: true, pluginTimeout:0 });
 const port = process.env.port ? parseInt(process.env.PORT) : 3000;
 app.log.info("Preparing To Launch!")
 await app.register(lifespanPlugin);
