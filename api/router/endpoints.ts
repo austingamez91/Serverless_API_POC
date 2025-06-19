@@ -1,10 +1,7 @@
 import { FastifyInstance } from "fastify";
-import {
-  getAllMakes,
-  getModelsByMake,
-  getPartsByModel,
-  getPartById,
-} from "../services/carService";
+import { prisma } from "../../common/db";
+import { createCarService } from "../services/carService";
+const carService = createCarService(prisma);
 
 export const registerRoutes = (app: FastifyInstance) => {
   app.head("/", async (req, reply) => {
@@ -21,7 +18,7 @@ export const registerRoutes = (app: FastifyInstance) => {
       offset?: number;
     };
 
-    const makes = await getAllMakes(name, limit, offset);
+    const makes = await carService.getAllMakes(name, limit, offset);
     return makes;
   });
 
@@ -35,7 +32,7 @@ export const registerRoutes = (app: FastifyInstance) => {
     const parsedLimit = limit ? parseInt(limit, 10) : undefined;
     const parsedOffset = offset ? parseInt(offset, 10) : undefined;
 
-    const models = await getModelsByMake(
+    const models = await carService.getModelsByMake(
       Number(makeId),
       name,
       parsedLimit,
@@ -59,7 +56,7 @@ export const registerRoutes = (app: FastifyInstance) => {
     const parsedLimit = limit ? parseInt(limit, 10) : undefined;
     const parsedOffset = offset ? parseInt(offset, 10) : undefined;
 
-    const parts = await getPartsByModel(
+    const parts = await carService.getPartsByModel(
       Number(modelId),
       name,
       parsedLimit,
@@ -75,7 +72,7 @@ export const registerRoutes = (app: FastifyInstance) => {
 
   app.get("/parts/:partId", async (req, reply) => {
     const { partId } = req.params as { partId: string };
-    const part = await getPartById(Number(partId));
+    const part = await carService.getPartById(Number(partId));
 
     if (!part) {
       return reply.code(404).send({ detail: "Part not found" });

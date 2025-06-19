@@ -1,41 +1,38 @@
 services:
-  # db:
-  #   image: postgres:15
-  #   restart: always
-  #   container_name: cars-db
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: car_parts
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - cars_pgdata:/var/lib/postgresql/data
+  db:
+    image: postgres:15
+    restart: always
+    container_name: cars-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: car_parts
+    ports:
+      - "5432:5432"
+    volumes:
+      - cars_pgdata:/var/lib/postgresql/data
 
-  # scraper:
-  #   build:
-  #     context: .
-  #     dockerfile: scraper/Dockerfile
-  #   container_name: cars-scraper
-  #   depends_on:
-  #     - db
-  #   environment:
-  #     DATABASE_URL: postgresql+asyncpg://caruser:carpass@db/cardb
-  #   command: poetry run python main.py
+  scraper:
+    build:
+      context: .
+      dockerfile: scraper/Dockerfile
+    container_name: cars-scraper
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/car_parts
+    command: sh -c "cd ../common && npx prisma db push && cd .. && npm run scrape"
   api:
     build:
       context: .
       dockerfile: ./api/Dockerfile
     container_name: cars-api
-    # depends_on:
-    #   - scraper
+    depends_on:
+      - scraper
     environment:
-      # The bug that caused me to put this took like 30 minutes to solve.
-      # Might be my most despised bug I've ever found.
-      - PYTHONUNBUFFERED=1
-      - DATABASE_URL=postgresql://postgres:postgres@localhost:5433/car_parts
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/car_parts
     ports:
       - "3000:3000"
-    command: npx tsx main.ts
+    command: sh -c "cd .. && npm run start-api"
 volumes:
   cars_pgdata:
