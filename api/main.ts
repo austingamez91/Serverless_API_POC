@@ -1,3 +1,6 @@
+import tracer from 'dd-trace';
+tracer.init();
+
 import Fastify from "fastify";
 import { registerRoutes } from "./router/endpoints";
 import lifespanPlugin from "./plugins/lifespan";
