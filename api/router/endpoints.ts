@@ -17,7 +17,9 @@ export const registerRoutes = (app: FastifyInstance) => {
   });
 
 
-  app.get("/health", async (req, reply) => {
+  app.get("/health", {
+    logLevel: "silent",
+  }, async (req, reply) => {
     return { status: "ok" };
   });
 
